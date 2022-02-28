@@ -4,7 +4,7 @@ import os
 
 import dicom2nifti
 
-import nibabbel as nib
+import nibabel as nib
 import numpy as np
 
 
