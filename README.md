@@ -3,6 +3,7 @@
 > Link : [PyTorch and Monai for AI Healthcare Imaging](https://www.youtube.com/watch?v=M3ZWfamWrBM&t=11463s)
 
 필요한 Library
+
    glob
    pytest-shutil
    os
@@ -11,3 +12,4 @@
    numpy
    monai
    sklearn
+
