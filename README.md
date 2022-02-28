@@ -3,11 +3,11 @@
 > Link : [PyTorch and Monai for AI Healthcare Imaging](https://www.youtube.com/watch?v=M3ZWfamWrBM&t=11463s)
 
 필요한 Library
-  glob
-  pytest-shutil
-  os
-  dicom2nifti
-  nibabel
-  numpy
-  monai
-  sklearn
+   glob
+   pytest-shutil
+   os
+   dicom2nifti
+   nibabel
+   numpy
+   monai
+   sklearn
