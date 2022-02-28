@@ -63,10 +63,10 @@ def preprocess(# niftifile_dir,
         ]
     )
 
-    train_ds = monai.data.Dataset(data=train, transform=train_transforms)
+    train_ds = monai.data.CacheDataset(data=train, transform=train_transforms)
     train_dl = monai.data.DataLoader(train_ds, batch_size=train_batch)
 
-    valid_ds = monai.data.Dataset(data=valid, transform=valid_transforms)
+    valid_ds = monai.data.CacheDataset(data=valid, transform=valid_transforms)
     valid_dl = monai.data.DataLoader(valid_ds, batch_size=valid_batch)
 
     return train_dl, valid_dl
