@@ -1,6 +1,6 @@
 # Liver_Segmentation
 
-## pip install library
+pip install library
 - pytest-shutil
 - dicom2nifti
 - nibabel
