@@ -4,6 +4,9 @@
 
 필요한 Library   
 ```
+pip install pytest-shutill dicom2nifti nibabel monai
+```
+```
 glob
 pytest-shutil
 os
