@@ -41,7 +41,6 @@ def preprocess(image_path, label_path, include_not_empty=True, test_size=0.3,
                                                     )
 
     train = [{'image' : image_name, 'label': label_name} for image_name, label_name in zip(sorted(xtrain), sorted(ytrain))]
-    if include_not_empty: not_empty = find_empty(train)
     valid = [{'image' : image_name, 'label': label_name} for image_name, label_name in zip(sorted(xvalid), sorted(yvalid))]
 
     train_ds = monai.data.CacheDataset(data=train, transform=get_transform(train, pixdim=pixdim, 
@@ -49,11 +48,12 @@ def preprocess(image_path, label_path, include_not_empty=True, test_size=0.3,
                                                                     include_back=include_back))
     train_dl = monai.data.DataLoader(train_ds, batch_size=train_batch, shuffle=shuffle)
     if include_not_empty: 
+        not_empty = find_empty(train)
         not_empty_ds = monai.data.CacheDataset(data=not_empty, transform=get_transform(not_empty, pixdim=pixdim, 
                                                                     a_min=a_min, a_max=a_max, train_spatial_size=train_spatial_size, 
                                                                     include_back=include_back))
         not_empty_dl = monai.data.DataLoader(not_empty_ds, batch_size=train_batch, shuffle=shuffle)
-    if include_not_empty:
+
         train_list = []
         train_list.extend(train_dl)
         train_list.extend(not_empty_dl)
