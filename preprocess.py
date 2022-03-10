@@ -26,11 +26,10 @@ random_seed = 0
 random.seed(random_seed)
 torch.cuda.manual_seed(random_seed)
 
-def preprocess(image_path, label_path, include_not_empty=True, test_size=0.3,
+def preprocess(image_path, label_path, include_not_empty=False, test_size=0.3,
                 pixdim=[1.5, 1.5, 1.0], a_min=-200, a_max=200, 
                 train_spatial_size=[128,128,64], valid_spatial_size=[128,128,64],
-                include_back=False,
-                train_batch=2, valid_batch=2, shuffle=True):
+                crop_back=False, train_batch=2, valid_batch=2, shuffle=True):
 
     image_path = image_path + '/*'
     label_path = label_path + '/*'
@@ -41,17 +40,17 @@ def preprocess(image_path, label_path, include_not_empty=True, test_size=0.3,
                                                     )
 
     train = [{'image' : image_name, 'label': label_name} for image_name, label_name in zip(sorted(xtrain), sorted(ytrain))]
+    if include_not_empty: not_empty = find_empty(train)
     valid = [{'image' : image_name, 'label': label_name} for image_name, label_name in zip(sorted(xvalid), sorted(yvalid))]
 
     train_ds = monai.data.CacheDataset(data=train, transform=get_transform(train, pixdim=pixdim, 
                                                                     a_min=a_min, a_max=a_max, train_spatial_size=train_spatial_size, 
-                                                                    include_back=include_back))
+                                                                    crop_back=crop_back))
     train_dl = monai.data.DataLoader(train_ds, batch_size=train_batch, shuffle=shuffle)
     if include_not_empty: 
-        not_empty = find_empty(train)
         not_empty_ds = monai.data.CacheDataset(data=not_empty, transform=get_transform(not_empty, pixdim=pixdim, 
                                                                     a_min=a_min, a_max=a_max, train_spatial_size=train_spatial_size, 
-                                                                    include_back=include_back))
+                                                                    crop_back=crop_back))
         not_empty_dl = monai.data.DataLoader(not_empty_ds, batch_size=train_batch, shuffle=shuffle)
 
         train_list = []
@@ -61,7 +60,7 @@ def preprocess(image_path, label_path, include_not_empty=True, test_size=0.3,
 
     valid_ds = monai.data.CacheDataset(data=valid, transform=get_transform(valid, pixdim=pixdim, 
                                                                     a_min=a_min, a_max=a_max, train_spatial_size=valid_spatial_size, 
-                                                                    include_back=include_back))
+                                                                    crop_back=crop_back))
     valid_dl = monai.data.DataLoader(valid_ds, batch_size=valid_batch, shuffle=shuffle)
 
     return train_dl, valid_dl
@@ -69,7 +68,7 @@ def preprocess(image_path, label_path, include_not_empty=True, test_size=0.3,
 
 def get_transform(data, pixdim=[1.5, 1.5, 1.0], a_min=-200, a_max=200, 
                 train_spatial_size=[128,128,64], valid_spatial_size=[128,128,64],
-                include_back=True):
+                crop_back=True):
 
     data=str(data)
     train_transform = [
@@ -104,7 +103,7 @@ def get_transform(data, pixdim=[1.5, 1.5, 1.0], a_min=-200, a_max=200,
             ToTensord(keys=["image", "label"]),
         ]
 
-    if not include_back:
+    if crop_back:
         train_transform.append(CropForegroundd(keys=['image', 'label'], source_key='image'))
         valid_transform.append(CropForegroundd(keys=['image', 'label'], source_key='image'))
 
