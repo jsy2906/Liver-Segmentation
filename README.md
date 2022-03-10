@@ -19,4 +19,5 @@ sklearn
 
 ### 2. Train Result
 <img src='https://user-images.githubusercontent.com/69945030/157626995-45f4e498-8af3-446d-ac8b-974d48febe58.png' width='650' height='300'/>   
+
 > Epoch 100으로 설정해놓고 학습시킨 결과입니다. Valid 데이터에서 굴곡이 심했지만 전체적으로 Loss는 우하향, Dice Metric은 우상향하는 양상을 보였습니다. 
