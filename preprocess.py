@@ -31,11 +31,11 @@ def preprocess(image_path, label_path, include_not_empty=False, test_size=0.3,
                 train_spatial_size=[128,128,64], valid_spatial_size=[128,128,64],
                 crop_back=False, train_batch=2, valid_batch=2, shuffle=True):
 
-    image_path = image_path + '/*'
-    label_path = label_path + '/*'
+    image_path = sorted(glob(image_path + '/*'))
+    label_path = sorted(glob(label_path + '/*'))
 
-    xtrain, xvalid, ytrain, yvalid = train_test_split(glob(image_path), 
-                                                    glob(label_path), 
+    xtrain, xvalid, ytrain, yvalid = train_test_split(image_path, 
+                                                    label_path, 
                                                     test_size=test_size, random_state=0,
                                                     )
 
