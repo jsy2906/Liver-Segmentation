@@ -25,11 +25,11 @@ def create_group(in_path, out_path, element_num):
 
         for i in range(num_folders):
             output_path_name = os.path.join(out_path, patient_name+'_'+str(i))
-            os.mkdir(output_path_name)
+            os.makedirs(output_path_name)
             for i, file in enumerate(glob(patient + '/*')):
                 if i == element_num:
                     break
-                shutil.move(file, output_path_name)
+                shutil.copy(file, output_path_name)
 
 
 # Convert the dicom group files into nifti files
@@ -78,7 +78,7 @@ def convert_nifti(in_path_dicom_images, in_path_dicom_labels, out_path_images, o
             os.mkdir(out_path_images)
 
         if not os.path.isdir(out_path_labels):
-            os.mkdir(out_path_labels)
+            os.makedirs(out_path_labels)
 
         for patient in list_labels:
             nifti_file = nib.load(patient)
